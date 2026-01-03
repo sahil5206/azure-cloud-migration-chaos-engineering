@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'docker:26-cli'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
 
     environment {
         IMAGE_NAME = "fastapi-app"
@@ -10,6 +15,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
+                echo "Checking out source code"
                 git branch: 'main',
                     url: 'https://github.com/sahil5206/azure-cloud-migration-chaos-engineering.git'
             }
@@ -17,20 +23,30 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
-                }
+                echo "Building Docker image"
+                sh '''
+                  docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
+                '''
             }
         }
 
         stage('Smoke Test') {
             steps {
+                echo "Running smoke test"
                 sh '''
-                CONTAINER_ID=$(docker run -d -p 8001:8000 ${IMAGE_NAME}:${IMAGE_TAG})
-                sleep 5
-                curl -f http://localhost:8001/health
-                docker stop $CONTAINER_ID
-                docker rm $CONTAINER_ID
+                  set -e
+
+                  CONTAINER_ID=$(docker run -d -p 8001:8000 ${IMAGE_NAME}:${IMAGE_TAG})
+
+                  echo "Waiting for application to start..."
+                  sleep 10
+
+                  echo "Calling health endpoint"
+                  curl -f http://localhost:8001/health
+
+                  echo "Stopping test container"
+                  docker stop $CONTAINER_ID
+                  docker rm $CONTAINER_ID
                 '''
             }
         }
@@ -38,13 +54,10 @@ pipeline {
 
     post {
         success {
-            echo "Build & smoke test successful"
+            echo "CI pipeline completed successfully"
         }
         failure {
-            echo "Pipeline failed"
-        }
-        always {
-            sh 'remember to clean up dangling containers/images if needed'
+            echo "CI pipeline failed"
         }
     }
 }
