@@ -3,6 +3,9 @@ from models import Order
 from database import get_connection
 from prometheus_client import Counter, Histogram, generate_latest
 import time
+from fastapi import Response
+from prometheus_client import CONTENT_TYPE_LATEST
+
 
 app = FastAPI()
 
@@ -69,6 +72,10 @@ def get_orders():
 
     return rows
 
+
 @app.get("/metrics")
 def metrics():
-    return generate_latest()
+    return Response(
+        content=generate_latest(),
+        media_type=CONTENT_TYPE_LATEST
+    )
