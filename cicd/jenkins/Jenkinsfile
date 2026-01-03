@@ -20,7 +20,7 @@ pipeline {
             steps {
                 echo "Building Docker image"
                 bat '''
-                docker build -t fastapi-app:%BUILD_NUMBER% .
+                docker build -f docker/Dockerfile -t fastapi-app:%BUILD_NUMBER% .
                 '''
             }
         }
