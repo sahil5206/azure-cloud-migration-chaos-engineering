@@ -1,14 +1,9 @@
 pipeline {
-    agent {
-        docker {
-            image 'docker:26-cli'
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
-        }
-    }
+    agent any
 
     environment {
         IMAGE_NAME = "fastapi-app"
-        IMAGE_TAG  = "${BUILD_NUMBER}"
+        IMAGE_TAG  = "%BUILD_NUMBER%"
     }
 
     stages {
@@ -24,8 +19,8 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo "Building Docker image"
-                sh '''
-                  docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
+                bat '''
+                docker build -t fastapi-app:%BUILD_NUMBER% .
                 '''
             }
         }
@@ -33,20 +28,13 @@ pipeline {
         stage('Smoke Test') {
             steps {
                 echo "Running smoke test"
-                sh '''
-                  set -e
-
-                  CONTAINER_ID=$(docker run -d -p 8001:8000 ${IMAGE_NAME}:${IMAGE_TAG})
-
-                  echo "Waiting for application to start..."
-                  sleep 10
-
-                  echo "Calling health endpoint"
-                  curl -f http://localhost:8001/health
-
-                  echo "Stopping test container"
-                  docker stop $CONTAINER_ID
-                  docker rm $CONTAINER_ID
+                bat '''
+                docker run -d -p 8001:8000 fastapi-app:%BUILD_NUMBER% > container_id.txt
+                timeout /t 10
+                curl http://localhost:8001/health
+                FOR /F %%i IN (container_id.txt) DO docker stop %%i
+                FOR /F %%i IN (container_id.txt) DO docker rm %%i
+                del container_id.txt
                 '''
             }
         }
