@@ -17,7 +17,7 @@
 - [🎯 Objectives](#-objectives)
 - [🏗️ Architecture](#️-architecture)
 - [🔁 Migration Strategy](#-migration-strategy)
-- [🛠️ Technology Stack]((#️-technology-stack)
+- [🛠️ Technology Stack](#️-technology-stack)
 - [⚙️ CI/CD Pipeline](#️-cicd-pipeline)
 - [🧪 Chaos Engineering](#-chaos-engineering)
 - [📊 Monitoring](#-monitoring)
@@ -58,15 +58,22 @@ The system was validated for **production readiness** using monitoring and chaos
 
 ## 🏗️ Architecture
 
-```mermaid
-graph TD
-    A[Developer] --> B[GitHub<br/>Source Code]
-    B --> C[Jenkins CI Pipeline]
-    C --> D[Docker Image<br/>Build & Test]
-    D --> E[Azure Container Registry<br/>(ACR)]
-    E --> F[Azure Kubernetes Service<br/>(AKS)]
-    F --> G[Azure Monitor<br/>Observability]
-    G --> H[Chaos Engineering<br/>Pod Failure Simulation]
+```
+Developer
+    ↓
+GitHub (Source Code)
+    ↓
+Jenkins CI Pipeline
+    ↓
+Docker Image Build & Test
+    ↓
+Azure Container Registry (ACR)
+    ↓
+Azure Kubernetes Service (AKS)
+    ↓
+Azure Monitor (Observability)
+    ↓
+Chaos Engineering (Pod Failure Simulation)
 ```
 
 ---
