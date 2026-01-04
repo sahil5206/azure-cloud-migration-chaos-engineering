@@ -4,3 +4,22 @@ __pycache__/
 orders.db
 .vscode/
 .idea/
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+.crash.log
+.terraform.lock.hcl
+
+# Terraform providers (extra safety)
+*.exe
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
