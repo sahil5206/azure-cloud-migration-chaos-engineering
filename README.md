@@ -2,9 +2,9 @@
 
 Production-grade DevOps project demonstrating re-platform migration, CI/CD automation, Kubernetes resilience, monitoring, and chaos engineering on Microsoft Azure.
 
-🔑 Keywords (ATS Optimized)
+🔑 Keywords 
 
-Azure AKS, DevOps, CI/CD, Jenkins, Docker, Kubernetes, Terraform, Azure Monitor, Cloud Migration, Re-platforming, Chaos Engineering, FastAPI, Microservices, Containerization, Infrastructure as Code, SRE
+Azure AKS, DevOps, CI/CD, Jenkins, Docker, Kubernetes, Terraform, Azure Monitor, Prometheus, Grafana, Cloud Migration, Re-platforming, Chaos Engineering, FastAPI, Microservices, Containerization, Infrastructure as Code, SRE
 
 📌 Project Summary
 
