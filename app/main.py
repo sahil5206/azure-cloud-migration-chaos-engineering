@@ -1,3 +1,4 @@
+APP_VERSION = "v2.0.0"
 from fastapi import FastAPI
 from models import Order
 from database import get_connection
@@ -79,3 +80,11 @@ def metrics():
         content=generate_latest(),
         media_type=CONTENT_TYPE_LATEST
     )
+
+@app.get("/version")
+def version():
+    return {
+        "service": "fastapi-app",
+        "version": "v2.0.0",
+        "status": "running"
+    }
